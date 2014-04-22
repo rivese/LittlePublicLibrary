@@ -1,0 +1,117 @@
+__author__ = 'elizabethrives'
+
+
+
+# This is modeled after a tiny neighborhood library, with only two shelves. Each time
+# someone borrows a book, they leave another book in its place. As it is a very simple
+# library, books are shelved solely according to the author's last name.
+
+
+
+class Library:
+    """Has a classification system & can report its entire collection of books"""
+
+    def __init__(self, name, branch):
+        self.name = name
+        self.branch = branch
+        self.shelf_1 = Shelf()
+        self.shelf_2 = Shelf()
+
+    def total_report(self):
+        print(self.name + ", " + self.branch + ":")
+        self.shelf_1.report()
+        self.shelf_2.report()
+
+    def enshelf(self, book):
+        if book.author_last[0] in classification[0:13]:
+            self.shelf_1.books.append(book)
+            print('added' + ':' ' ' + book.title)
+
+        if book.author_last[0] in classification[13:27]:
+            self.shelf_2.books.append(book)
+            print('added' + ':' + ' ' + book.title)
+
+    def unshelf(self, book):
+        if book.author_last[0] in classification[0:13]:
+            self.shelf_1.books.remove(book)
+            print('borrowed' ':' + ' ' + book.title)
+
+        if book.author_last[0] in classification[13:27]:
+            self.shelf_2.books.remove(book)
+            print('borrowed' ':' + ' ' + book.title)
+
+
+# The library's classification method:
+# Books are shelved according to the first letter of author's last name
+
+classification = ['A', 'B', 'C', 'D', 'E', 'F',
+'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+
+
+class Shelf:
+    """Knows the books it contains"""
+
+    def __init__(self):
+        self.books = []
+
+    def report(self):
+        for book in self.books:
+            book.report()
+
+
+
+class Book:
+    """Shelves and unshelves books by author's last name."""
+
+    def __init__(self, title, author_last, author_first):
+       self.title = title
+       self.author_last = author_last
+       self.author_first = author_first
+
+
+    def enshelf(self, library):
+        library.enshelf(self)
+
+
+    def unshelf(self, library):
+        library.unshelf(self)
+
+    def report(self):
+        print(self.title)
+
+
+
+
+
+# Inputs:
+# The library's initial collection was created:
+little_free_library = Library('Little Free Library', 'Nolita')
+the_little_prince = Book('The Little Prince', 'Saint-Exupery', 'Antoine')
+the_little_prince.enshelf(little_free_library)
+ines_of_my_soul = Book('Ines of my Soul', 'Allende', 'Isabel')
+ines_of_my_soul.enshelf(little_free_library)
+pigs_in_heaven = Book('Pigs in Heaven', 'Kingsolver', 'Barbara')
+pigs_in_heaven.enshelf(little_free_library)
+
+# Customers borrow and add books:
+the_little_prince.unshelf(little_free_library)
+programming_in_html5 = Book('Programming in HTML5', 'Johnson', 'Glenn')
+programming_in_html5.enshelf(little_free_library)
+
+little_free_library.total_report()
+
+# Outputs:
+'''
+added: The Little Prince
+added: Ines of my Soul
+added: Pigs in Heaven
+borrowed: The Little Prince
+added: Programming in HTML5
+Little Free Library, Nolita:
+Ines of my Soul
+Pigs in Heaven
+Programming in HTML5
+
+'''
